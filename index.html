@@ -4,17 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JOKER HD</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0f1016; color: #ffffff; direction: rtl; overflow: hidden; }
+        .screen { display: none; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; background-color: #0f1016; justify-content: center; align-items: center; flex-direction: column; padding: 20px; }
+        .screen.active { display: flex; }
+        .logo { font-size: 2.5rem; font-weight: bold; color: #fbc531; margin-bottom: 10px; text-align: center; }
+        .loading { font-size: 1.1rem; color: #dcdde1; }
+        .card { background: #1e1e24; padding: 30px; border-radius: 15px; width: 100%; max-width: 400px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); text-align: center; border: 1px solid #2f3640; }
+        .card h2 { margin-bottom: 10px; color: #fbc531; }
+        .subtitle { font-size: 0.9rem; color: #718093; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; background: #2f3640; border: 1px solid #485460; border-radius: 8px; color: #fff; font-size: 1rem; outline: none; }
+        input:focus { border-color: #fbc531; }
+        button { width: 100%; padding: 12px; background: #e84118; border: none; border-radius: 8px; color: white; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; margin-bottom: 10px; }
+        button:hover { opacity: 0.9; }
+        button.visitor { background: #2f3640; }
+        button.code { background: #009432; }
+        button.secondary { background: transparent; border: 1px solid #485460; color: #dcdde1; }
+        .line { width: 100%; height: 1px; background: #2f3640; margin: 15px 0; }
+        .timer { font-size: 2rem; font-weight: bold; color: #fbc531; margin: 20px 0; }
+        .topbar { width: 100%; height: 60px; background: #1e1e24; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; border-bottom: 1px solid #2f3640; position: absolute; top: 0; right: 0; }
+    </style>
 </head>
 <body>
-
-    <!-- 1. شاشة التحميل -->
     <div id="loader" class="screen active">
         <div class="logo">🎭 JOKER HD</div>
         <div class="loading">جاري تشغيل التطبيق...</div>
     </div>
-
-    <!-- 2. شاشة تسجيل الدخول -->
     <div id="login-page" class="screen">
         <div class="card">
             <h2>🎭 JOKER HD</h2>
@@ -27,8 +43,6 @@
             <button id="openCodeBtn" class="code">لديك كود VIP؟ تفعيل الاشتراك</button>
         </div>
     </div>
-
-    <!-- 3. شاشة تجربة الزائر -->
     <div id="visitor-page" class="screen">
         <div class="card">
             <h2>تجربة الزائر</h2>
@@ -37,8 +51,6 @@
             <button id="visitorEnter">دخول إلى التطبيق</button>
         </div>
     </div>
-
-    <!-- 4. شاشة تفعيل الكود -->
     <div id="code-page" class="screen">
         <div class="card">
             <h2>تفعيل الكود</h2>
@@ -47,19 +59,15 @@
             <button id="backLogin" class="secondary">رجوع</button>
         </div>
     </div>
-
-    <!-- 5. الصفحة الرئيسية والأقسام -->
     <div id="home-page" class="screen">
         <div class="topbar">
             <h2>🎭 JOKER HD</h2>
-            <button id="logoutBtn" style="width: auto; padding: 5px 15px; background: #2f3640; font-size: 0.8rem;">خروج</button>
-        </div>
-        <div id="homeContent" style="width: 100%; height: calc(100vh - 60px); padding: 20px; overflow-y: auto;">
-            <!-- سيتم تحميل المحتوى والأقسام هنا ديناميكياً -->
+            <button id="logoutBtn" style="width: auto; padding: 5px 15px; background: #2f3640; font-size: 0.8rem; margin: 0;">خروج</button></div>
+        <div id="homeContent" style="width: 100%; height: calc(100vh - 60px); padding: 20px; overflow-y: auto; margin-top: 60px;">
+            <h3 style="color: #fbc531; margin-bottom: 15px;">مرحباً بك في لوحة تحكم JOKER HD</h3>
+            <p>تم تشغيل التطبيق بنجاح وتفعيل الأقسام بكامل الميزات!</p>
         </div>
     </div>
-
-    <!-- ربط ملفات الجافا سكريبت -->
     <script type="module" src="js/app.js"></script>
 </body>
 </html>

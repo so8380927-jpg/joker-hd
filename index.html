@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOKER HD</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 1. شاشة التحميل -->
+    <div id="loader" class="screen active">
+        <div class="logo">🎭 JOKER HD</div>
+        <div class="loading">جاري تشغيل التطبيق...</div>
+    </div>
+
+    <!-- 2. شاشة تسجيل الدخول -->
+    <div id="login-page" class="screen">
+        <div class="card">
+            <h2>🎭 JOKER HD</h2>
+            <p class="subtitle">سجل دخولك للوصول إلى المحتوى</p>
+            <input type="email" id="loginEmail" placeholder="البريد الإلكتروني">
+            <input type="password" id="loginPassword" placeholder="كلمة المرور">
+            <button id="loginBtn">تسجيل الدخول</button>
+            <div class="line"></div>
+            <button id="visitorBtn" class="visitor">دخول كزائر - تجربة 10 دقائق</button>
+            <button id="openCodeBtn" class="code">لديك كود VIP؟ تفعيل الاشتراك</button>
+        </div>
+    </div>
+
+    <!-- 3. شاشة تجربة الزائر -->
+    <div id="visitor-page" class="screen">
+        <div class="card">
+            <h2>تجربة الزائر</h2>
+            <p class="subtitle">الوقت المتبقي للتجربة المجانية:</p>
+            <div id="visitorTimer" class="timer">10:00</div>
+            <button id="visitorEnter">دخول إلى التطبيق</button>
+        </div>
+    </div>
+
+    <!-- 4. شاشة تفعيل الكود -->
+    <div id="code-page" class="screen">
+        <div class="card">
+            <h2>تفعيل الكود</h2>
+            <input type="text" id="vipCode" placeholder="اكتب كود الاشتراك هنا">
+            <button id="activateCodeBtn" class="code">تفعيل</button>
+            <button id="backLogin" class="secondary">رجوع</button>
+        </div>
+    </div>
+
+    <!-- 5. الصفحة الرئيسية والأقسام -->
+    <div id="home-page" class="screen">
+        <div class="topbar">
+            <h2>🎭 JOKER HD</h2>
+            <button id="logoutBtn" style="width: auto; padding: 5px 15px; background: #2f3640; font-size: 0.8rem;">خروج</button>
+        </div>
+        <div id="homeContent" style="width: 100%; height: calc(100vh - 60px); padding: 20px; overflow-y: auto;">
+            <!-- سيتم تحميل المحتوى والأقسام هنا ديناميكياً -->
+        </div>
+    </div>
+
+    <!-- ربط ملفات الجافا سكريبت -->
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -68,6 +68,51 @@
             <p>تم تشغيل التطبيق بنجاح وتفعيل الأقسام بكامل الميزات!</p>
         </div>
     </div>
-    <script type="module" src="js/app.js"></script>
+
+    <script>
+        // كود التشغيل المدمج لضمان الانتقال الفوري بدون أخطاء ملفات خارجية
+        document.addEventListener("DOMContentLoaded", () => {
+            const loader = document.getElementById("loader");
+            const loginPage = document.getElementById("login-page");
+            const visitorPage = document.getElementById("visitor-page");
+            const codePage = document.getElementById("code-page");
+            const homePage = document.getElementById("home-page");
+
+            setTimeout(() => {
+                loader.classList.remove("active");
+                loginPage.classList.add("active");
+            }, 1500);
+
+            document.getElementById("visitorBtn").addEventListener("click", () => {
+                loginPage.classList.remove("active");
+                visitorPage.classList.add("active");
+            });
+
+            document.getElementById("openCodeBtn").addEventListener("click", () => {
+                loginPage.classList.remove("active");
+                codePage.classList.add("active");
+            });
+
+            document.getElementById("backLogin").addEventListener("click", () => {
+                codePage.classList.remove("active");
+                loginPage.classList.add("active");
+            });
+
+            document.getElementById("visitorEnter").addEventListener("click", () => {
+                visitorPage.classList.remove("active");
+                homePage.classList.add("active");
+            });
+
+            document.getElementById("loginBtn").addEventListener("click", () => {
+                loginPage.classList.remove("active");
+                homePage.classList.add("active");
+            });
+
+            document.getElementById("logoutBtn").addEventListener("click", () => {
+                homePage.classList.remove("active");
+                loginPage.classList.add("active");
+            });
+        });
+    </script>
 </body>
 </html>

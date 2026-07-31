@@ -7,296 +7,157 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #0f1016; color: #ffffff; direction: rtl; overflow: hidden; }
-        .screen { display: none; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; background-color: #0f1016; justify-content: center; align-items: center; flex-direction: column; padding: 20px; }
+        .screen { display: none; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; background-color: #0f1016; justify-content: center; align-items: center; flex-direction: column; }
         .screen.active { display: flex; }
-        .logo { font-size: 2.5rem; font-weight: bold; color: #fbc531; margin-bottom: 10px; text-align: center; }
-        .loading { font-size: 1.1rem; color: #dcdde1; }
-        .card { background: #1e1e24; padding: 25px; border-radius: 15px; width: 100%; max-width: 400px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); text-align: center; border: 1px solid #2f3640; }
-        .card h2 { margin-bottom: 10px; color: #fbc531; }
+        .card { background: #1e1e24; padding: 25px; border-radius: 15px; width: 90%; max-width: 400px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); text-align: center; }
+        .logo { font-size: 2.5rem; font-weight: bold; color: #fbc531; margin-bottom: 10px; }
         .subtitle { font-size: 0.9rem; color: #718093; margin-bottom: 15px; }
-        input { width: 100%; padding: 12px; margin-bottom: 12px; background: #2f3640; border: 1px solid #485460; border-radius: 8px; color: #fff; font-size: 1rem; outline: none; }
-        input:focus { border-color: #fbc531; }
-        button { width: 100%; padding: 12px; background: #e84118; border: none; border-radius: 8px; color: white; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; margin-bottom: 8px; }
+        input { width: 100%; padding: 12px; margin-bottom: 12px; background: #2f3640; border: 1px solid #485460; border-radius: 8px; color: #fff; font-size: 1rem; text-align: center; }
+        input:focus { border-color: #fbc531; outline: none; }
+        button { width: 100%; padding: 12px; background: #009432; border: none; border-radius: 8px; color: white; font-size: 1rem; font-weight: bold; cursor: pointer; margin-bottom: 10px; transition: 0.3s; }
         button:hover { opacity: 0.9; }
-        button.visitor { background: #2f3640; }
-        button.code { background: #009432; }
-        button.support { background: #00a8ff; }
         button.secondary { background: transparent; border: 1px solid #485460; color: #dcdde1; }
-        .line { width: 100%; height: 1px; background: #2f3640; margin: 12px 0; }
-        .timer { font-size: 2rem; font-weight: bold; color: #fbc531; margin: 15px 0; }
-        .topbar { width: 100%; height: 60px; background: #1e1e24; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; border-bottom: 1px solid #2f3640; position: absolute; top: 0; right: 0; z-index: 10; }
-        .grid-sections { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; max-width: 500px; margin-top: 20px; }
-        .section-box { background: #1e1e24; padding: 20px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s; border: 1px solid #2f3640; }
-        .section-box:hover { border-color: #fbc531; transform: translateY(-3px); }
-        .section-box span { font-size: 2rem; display: block; margin-bottom: 8px; }
-        .section-box h4 { color: #fff; font-size: 1.1rem; }
-        .error-msg { color: #e84118; font-size: 0.85rem; margin-bottom: 10px; display: none; }
+        .error-box { color: #e84118; font-size: 0.9rem; margin-bottom: 10px; display: none; }
     </style>
 </head>
 <body>
-    <div id="loader" class="screen active">
-        <div class="logo">🎭 JOKER HD</div>
-        <div class="loading">جاري تشغيل التطبيق...</div>
-    </div>
 
-    <div id="login-page" class="screen">
+    <!-- شاشة البداية -->
+    <div id="loginPage" class="screen active">
         <div class="card">
-            <h2>🎭 JOKER HD</h2>
-            <p class="subtitle">سجل دخولك للوصول إلى المحتوى</p>
-            <div id="loginError" class="error-msg"></div>
-            <input type="email" id="loginEmail" placeholder="البريد الإلكتروني">
-            <input type="password" id="loginPassword" placeholder="كلمة المرور">
-            <button id="loginBtn">تسجيل الدخول</button>
-            <button id="goToRegister" class="secondary">إنشاء حساب جديد</button>
-            <div class="line"></div>
-            <button id="visitorBtn" class="visitor">دخول كزائر - تجربة 10 دقائق</button>
-            <button id="openCodeBtn" class="code">لديك كود VIP؟ تفعيل الاشتراك</button>
-            <button id="supportBtnLogin" class="support">مركز الدعم والمساعدة</button>
-        </div>
-    </div><div id="register-page" class="screen">
-        <div class="card">
-            <h2>إنشاء حساب جديد</h2>
-            <div id="regError" class="error-msg"></div>
-            <input type="email" id="regEmail" placeholder="البريد الإلكتروني">
-            <input type="password" id="regPassword" placeholder="كلمة المرور الجديدة (6 أحرف على الأقل)">
-            <button id="submitRegister" class="code">تسجيل الحساب</button>
-            <button id="backToLogin" class="secondary">رجوع</button>
+            <div class="logo">JOKER HD</div>
+            <div class="subtitle">أهلاً بك في التطبيق</div>
+            <button id="goToCodeBtn">لديك كود VIP؟ تفعيل الاشتراك</button>
+            <button id="visitorBtn" class="secondary">الدخول كزائر</button>
         </div>
     </div>
 
-    <div id="visitor-page" class="screen">
+    <!-- شاشة إدخال الكود -->
+    <div id="codePage" class="screen">
         <div class="card">
-            <h2>تجربة الزائر</h2>
-            <p class="subtitle">الوقت المتبقي للتجربة المجانية:</p>
-            <div id="visitorTimer" class="timer">10:00</div>
-            <button id="visitorEnter">دخول إلى الأقسام</button>
+            <div class="logo">تفعيل الكود</div>
+            <div class="subtitle" style="color: #fbc531;">الرجاء إدخال كود الاشتراك الخاص بك</div>
+            <div id="codeError" class="error-box"></div>
+            <input type="text" id="vipCode" placeholder="أدخل الكود هنا" style="text-transform: uppercase;">
+            <button id="activateCodeBtn">تفعيل الاشتراك</button>
+            <button id="backToLoginBtn" class="secondary">رجوع</button>
         </div>
     </div>
 
-    <div id="code-page" class="screen">
+    <!-- الشاشة الرئيسية للتطبيق -->
+    <div id="homePage" class="screen">
         <div class="card">
-            <h2>تفعيل الكود</h2>
-            <div id="codeError" class="error-msg"></div>
-            <input type="text" id="vipCode" placeholder="اكتب كود الاشتراك هنا">
-            <button id="activateCodeBtn" class="code">تفعيل الاشتراك</button>
-            <button id="backLogin" class="secondary">رجوع</button>
-        </div>
-    </div>
-
-    <div id="support-page" class="screen">
-        <div class="card">
-            <h2>مركز الدعم الفني</h2>
-            <p class="subtitle">تواصل معنا عبر القنوات التالية:</p>
-            <button class="support" style="background: #25d366;" onclick="window.open('https://wa.me/', '_blank')">تواصل عبر واتساب</button>
-            <button class="support" style="background: #0088cc;" onclick="window.open('https://telegram.org/', '_blank')">قناة التليجرام</button>
-            <button id="backFromSupport" class="secondary">رجوع</button>
-        </div>
-    </div>
-
-    <div id="home-page" class="screen" style="justify-content: flex-start; padding-top: 80px;">
-        <div class="topbar">
-            <h2>🎭 JOKER HD</h2>
-            <button id="logoutBtn" style="width: auto; padding: 6px 15px; background: #2f3640; font-size: 0.8rem; margin: 0;">خروج</button>
-        </div>
-        <h3 style="color: #fbc531; margin-bottom: 5px; text-align: center;">أقسام التطبيق الرئيسية</h3>
-        <p style="color: #718093; font-size: 0.9rem; margin-bottom: 15px; text-align: center;">اختر القسم المطلوب للمتابعة</p>
-        
-        <div class="grid-sections">
-            <div class="section-box" onclick="alert('جاري فتح قسم البث المباشر...')">
-                <span>📡</span>
-                <h4>البث المباشر</h4>
-            </div>
-            <div class="section-box" onclick="alert('جاري فتح قسم الأفلام والمسلسلات...')">
-                <span>🎬</span>
-                <h4>الأفلام والمسلسلات</h4>
-            </div>
-            <div class="section-box" onclick="alert('جاري فتح قنوات الرياضة...')">
-                <span>⚽️</span>
-                <h4>القنوات الرياضية</h4>
-            </div>
-            <div class="section-box" onclick="alert('جاري فتح قسم الباقات المتميزة...')">
-                <span>⭐️</span>
-                <h4>باقات VIP</h4>
-            </div>
+            <div class="logo">JOKER HD</div>
+            <div class="subtitle" style="color: #4cd137;">تم تفعيل الحساب بنجاح! 🎉</div>
+            <p style="margin-bottom: 20px;">مرحباً بك في لوحة التحكم الرئيسية الخاصة بك.</p>
+            <button id="logoutBtn" class="secondary">تسجيل الخروج</button>
         </div>
     </div>
 
     <script type="module">
+        // استيراد مكتبات فايربيس
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { 
-          getAuth,
-          createUserWithEmailAndPassword,
-          signInWithEmailAndPassword,
-          signOut
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { 
-          getFirestore,
-          collection,
-          getDocs,
-          query,
-          where,
-          updateDoc,
-          doc
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, query, where, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+        // إعدادات قاعدة البيانات الخاصة بك
         const firebaseConfig = {
-          apiKey: "AIzaSyAdAQ49EIcldflX-Am5tk0NHJUur0ewXVE",
-          authDomain: "jokeerhd-64542.firebaseapp.com",
-          projectId: "jokeerhd-64542",
-          storageBucket: "jokeerhd-64542.firebasestorage.app",
-          messagingSenderId: "950615684006",
-          appId: "1:950615684006:web:0bf6a3c2044da1c4f61567"
-        };const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+            apiKey: "AIzaSyAdAQ49EIcldflX-Am5tk0NHJUur0ewXVE",
+            authDomain: "jokeerhd-64542.firebaseapp.com",
+            projectId: "jokeerhd-64542",
+            storageBucket: "jokeerhd-64542.firebasestorage.app",
+            messagingSenderId: "950615684006",
+            appId: "1:950615684006:web:0bf6a3c2044da1c4f61567"
+        };
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const loader = document.getElementById("loader");
-            const loginPage = document.getElementById("login-page");
-            const registerPage = document.getElementById("register-page");
-            const visitorPage = document.getElementById("visitor-page");
-            const codePage = document.getElementById("code-page");
-            const supportPage = document.getElementById("support-page");
-            const homePage = document.getElementById("home-page");
+        // تهيئة فايربيس
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);// تعريف الشاشات
+        const loginPage = document.getElementById("loginPage");
+        const codePage = document.getElementById("codePage");
+        const homePage = document.getElementById("homePage");
 
-            setTimeout(() => {
-                loader.classList.remove("active");
-                loginPage.classList.add("active");
-            }, 1000);
+        // التنقل بين الشاشات
+        document.getElementById("goToCodeBtn").addEventListener("click", () => {
+            loginPage.classList.remove("active");
+            codePage.classList.add("active");
+        });
 
-            document.getElementById("goToRegister").addEventListener("click", () => {
-                loginPage.classList.remove("active");
-                registerPage.classList.add("active");
-            });
+        document.getElementById("backToLoginBtn").addEventListener("click", () => {
+            codePage.classList.remove("active");
+            loginPage.classList.add("active");
+        });
 
-            document.getElementById("backToLogin").addEventListener("click", () => {
-                registerPage.classList.remove("active");
-                loginPage.classList.add("active");
-            });
+        document.getElementById("visitorBtn").addEventListener("click", () => {
+            loginPage.classList.remove("active");
+            homePage.classList.add("active");
+        });
 
-            document.getElementById("visitorBtn").addEventListener("click", () => {
-                loginPage.classList.remove("active");
-                visitorPage.classList.add("active");
-            });
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            homePage.classList.remove("active");
+            loginPage.classList.add("active");
+        });
 
-            document.getElementById("openCodeBtn").addEventListener("click", () => {
-                loginPage.classList.remove("active");
-                codePage.classList.add("active");
-            });
+        // تفعيل كود الـ VIP والتحقق من قاعدة البيانات
+        document.getElementById("activateCodeBtn").addEventListener("click", async () => {
+            const codeInput = document.getElementById("vipCode");
+            const codeText = codeInput.value.trim().toUpperCase(); // يحول الحروف إلى كبيرة تلقائياً
+            const errBox = document.getElementById("codeError");
+            const btn = document.getElementById("activateCodeBtn");
 
-            document.getElementById("supportBtnLogin").addEventListener("click", () => {
-                loginPage.classList.remove("active");
-                supportPage.classList.add("active");
-            });
+            if (!codeText) {
+                errBox.style.display = "block";
+                errBox.innerText = "الرجاء إدخال كود الاشتراك";
+                return;
+            }
 
-            document.getElementById("backFromSupport").addEventListener("click", () => {
-                supportPage.classList.remove("active");
-                loginPage.classList.add("active");
-            });
+            btn.disabled = true;
+            btn.innerText = "جاري التحقق...";
+            errBox.style.display = "none";
 
-            document.getElementById("backLogin").addEventListener("click", () => {
-                codePage.classList.remove("active");
-                loginPage.classList.add("active");
-            });
+            try {
+                // البحث عن الكود في قاعدة البيانات
+                const q = query(
+                    collection(db, "vip_codes"),
+                    where("code", "==", codeText)
+                );
 
-            document.getElementById("visitorEnter").addEventListener("click", () => {
-                visitorPage.classList.remove("active");
-                homePage.classList.add("active");
-            });
+                const result = await getDocs(q);
 
-            // تسجيل الدخول عبر Firebase Auth
-            document.getElementById("loginBtn").addEventListener("click", async () => {
-                const email = document.getElementById("loginEmail").value.trim();
-                const password = document.getElementById("loginPassword").value;
-                const errBox = document.getElementById("loginError");
+                if (!result.empty) {
+                    const codeDoc = result.docs[0];
+                    const codeData = codeDoc.data();
 
-                if (!email || !password) {
-                    errBox.style.display = "block";
-                    errBox.innerText = "الرجاء إدخال البريد وكلمة المرور";
-                    return;
-                }
+                    // التحقق مما إذا كان الكود غير فعال أو مستخدم
+                    if (codeData.active === false) {
+                        errBox.style.display = "block";
+                        errBox.innerText = "عذراً، هذا الكود غير فعال.";
+                    } else if (codeData.used === true) {
+                        errBox.style.display = "block";
+                        errBox.innerText = "عذراً، هذا الكود مستخدم مسبقاً!";
+                    } else {
+                        // الكود صالح! نقوم بتحديث حالته ليصبح مستخدماً
+                        await updateDoc(doc(db, "vip_codes", codeDoc.id), {
+                            used: true
+                        });
 
-                try {
-                    await signInWithEmailAndPassword(auth, email, password);
-                    loginPage.classList.remove("active");
-                    homePage.classList.add("active");
-                } catch (error) {
-                    errBox.style.display = "block";
-                    errBox.innerText = "خطأ: البريد أو كلمة المرور غير صحيحة";
-                }
-            });
-
-            // إنشاء حساب جديد عبر Firebase Auth
-            document.getElementById("submitRegister").addEventListener("click", async () => {
-                const email = document.getElementById("regEmail").value.trim();
-                const password = document.getElementById("regPassword").value;
-                const errBox = document.getElementById("regError");
-
-                if (!email || !password) {
-                    errBox.style.display = "block";
-                    errBox.innerText = "الرجاء تعبئة جميع الحقول";
-                    return;
-                }try {
-                    await createUserWithEmailAndPassword(auth, email, password);
-                    alert("تم إنشاء الحساب بنجاح!");
-                    registerPage.classList.remove("active");
-                    loginPage.classList.add("active");
-                } catch (error) {
-                    errBox.style.display = "block";
-                    errBox.innerText = "فشل التسجيل، تأكد من صحة البريد أو قوة كلمة المرور";
-                }
-            });
-
-            // التحقق من كود الـ VIP عبر Firebase Firestore
-            document.getElementById("activateCodeBtn").addEventListener("click", async () => {
-                const codeText = document.getElementById("vipCode").value.trim();
-                const errBox = document.getElementById("codeError");
-
-                if (!codeText) {
-                    errBox.style.display = "block";
-                    errBox.innerText = "الرجاء إدخال كود الاشتراك";
-                    return;
-                }
-
-                try {
-                    errBox.style.display = "none";
-                    // افتراض أن اسم الـ Collection في قاعدة البيانات هو 'codes'
-                    // والحقل الذي يخزن قيمة الكود هو 'code'
-                    const q = query(collection(db, "codes"), where("code", "==", codeText));
-                    const querySnapshot = await getDocs(q);
-
-                    if (!querySnapshot.empty) {
-                        let codeDoc = querySnapshot.docs[0];
-                        let codeData = codeDoc.data();
-
-                        // تحقق اختياري إن كان الكود مستخدماً مسبقاً (إذا كان لديك حقل used)
-                        if (codeData.used === true) {
-                            errBox.style.display = "block";
-                            errBox.innerText = "هذا الكود مستخدم مسبقاً!";
-                            return;
-                        }
-
-                        // (اختياري) تحديث الكود ليصبح مستخدماً لئلا يتم تكراره
-                        await updateDoc(doc(db, "codes", codeDoc.id), { used: true });
-
-                        alert("تم تفعيل الكود بنجاح!");
+                        alert("تم تفعيل الكود بنجاح! مرحباً بك في VIP");
+                        
+                        // إخفاء صفحة الكود وإظهار الصفحة الرئيسية
                         codePage.classList.remove("active");
                         homePage.classList.add("active");
-                    } else {
-                        errBox.style.display = "block";
-                        errBox.innerText = "الكود غير صحيح أو منتهي الصلاحية";
                     }
-                } catch (error) {
+                } else {
                     errBox.style.display = "block";
-                    errBox.innerText = "حدث خطأ أثناء الاتصال بقاعدة البيانات";
+                    errBox.innerText = "الكود غير صحيح، تأكد من كتابته بشكل سليم.";
                 }
-            });
-
-            document.getElementById("logoutBtn").addEventListener("click", async () => {
-                await signOut(auth);
-                homePage.classList.remove("active");
-                loginPage.classList.add("active");
-            });
+            } catch (error) {
+                console.error("Firebase Error:", error);
+                errBox.style.display = "block";
+                errBox.innerText = "حدث خطأ أثناء الاتصال. يرجى المحاولة لاحقاً.";
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "تفعيل الاشتراك";
+            }
         });
     </script>
 </body>

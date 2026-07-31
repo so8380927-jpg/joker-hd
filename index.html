@@ -11,77 +11,156 @@
         .screen.active { display: flex; }
         .logo { font-size: 2.5rem; font-weight: bold; color: #fbc531; margin-bottom: 10px; text-align: center; }
         .loading { font-size: 1.1rem; color: #dcdde1; }
-        .card { background: #1e1e24; padding: 30px; border-radius: 15px; width: 100%; max-width: 400px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); text-align: center; border: 1px solid #2f3640; }
+        .card { background: #1e1e24; padding: 25px; border-radius: 15px; width: 100%; max-width: 400px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); text-align: center; border: 1px solid #2f3640; }
         .card h2 { margin-bottom: 10px; color: #fbc531; }
-        .subtitle { font-size: 0.9rem; color: #718093; margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; background: #2f3640; border: 1px solid #485460; border-radius: 8px; color: #fff; font-size: 1rem; outline: none; }
+        .subtitle { font-size: 0.9rem; color: #718093; margin-bottom: 15px; }
+        input { width: 100%; padding: 12px; margin-bottom: 12px; background: #2f3640; border: 1px solid #485460; border-radius: 8px; color: #fff; font-size: 1rem; outline: none; }
         input:focus { border-color: #fbc531; }
-        button { width: 100%; padding: 12px; background: #e84118; border: none; border-radius: 8px; color: white; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; margin-bottom: 10px; }
+        button { width: 100%; padding: 12px; background: #e84118; border: none; border-radius: 8px; color: white; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; margin-bottom: 8px; }
         button:hover { opacity: 0.9; }
         button.visitor { background: #2f3640; }
         button.code { background: #009432; }
+        button.support { background: #00a8ff; }
         button.secondary { background: transparent; border: 1px solid #485460; color: #dcdde1; }
-        .line { width: 100%; height: 1px; background: #2f3640; margin: 15px 0; }
-        .timer { font-size: 2rem; font-weight: bold; color: #fbc531; margin: 20px 0; }
-        .topbar { width: 100%; height: 60px; background: #1e1e24; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; border-bottom: 1px solid #2f3640; position: absolute; top: 0; right: 0; }
+        .line { width: 100%; height: 1px; background: #2f3640; margin: 12px 0; }
+        .timer { font-size: 2rem; font-weight: bold; color: #fbc531; margin: 15px 0; }
+        .topbar { width: 100%; height: 60px; background: #1e1e24; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; border-bottom: 1px solid #2f3640; position: absolute; top: 0; right: 0; z-index: 10; }
+        .grid-sections { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; max-width: 500px; margin-top: 20px; }
+        .section-box { background: #1e1e24; padding: 20px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s; border: 1px solid #2f3640; }
+        .section-box:hover { border-color: #fbc531; transform: translateY(-3px); }
+        .section-box span { font-size: 2rem; display: block; margin-bottom: 8px; }
+        .section-box h4 { color: #fff; font-size: 1.1rem; }
+        .error-msg { color: #e84118; font-size: 0.85rem; margin-bottom: 10px; display: none; }
     </style>
 </head>
 <body>
     <div id="loader" class="screen active">
         <div class="logo">🎭 JOKER HD</div>
-        <div class="loading">جاري تشغيل التطبيق...</div>
+        <div class="loading">جاري الاتصال بقاعدة البيانات...</div>
     </div>
+
     <div id="login-page" class="screen">
         <div class="card">
             <h2>🎭 JOKER HD</h2>
             <p class="subtitle">سجل دخولك للوصول إلى المحتوى</p>
+            <div id="loginError" class="error-msg"></div>
             <input type="email" id="loginEmail" placeholder="البريد الإلكتروني">
             <input type="password" id="loginPassword" placeholder="كلمة المرور">
             <button id="loginBtn">تسجيل الدخول</button>
+            <button id="goToRegister" class="secondary">إنشاء حساب جديد</button>
             <div class="line"></div>
             <button id="visitorBtn" class="visitor">دخول كزائر - تجربة 10 دقائق</button>
             <button id="openCodeBtn" class="code">لديك كود VIP؟ تفعيل الاشتراك</button>
+            <button id="supportBtnLogin" class="support">مركز الدعم والمساعدة</button>
+        </div>
+    </div><div id="register-page" class="screen">
+        <div class="card">
+            <h2>إنشاء حساب جديد</h2>
+            <div id="regError" class="error-msg"></div>
+            <input type="email" id="regEmail" placeholder="البريد الإلكتروني">
+            <input type="password" id="regPassword" placeholder="كلمة المرور الجديدة (6 أحرف على الأقل)">
+            <button id="submitRegister" class="code">تسجيل الحساب</button>
+            <button id="backToLogin" class="secondary">رجوع لتسجيل الدخول</button>
         </div>
     </div>
+
     <div id="visitor-page" class="screen">
         <div class="card">
             <h2>تجربة الزائر</h2>
             <p class="subtitle">الوقت المتبقي للتجربة المجانية:</p>
             <div id="visitorTimer" class="timer">10:00</div>
-            <button id="visitorEnter">دخول إلى التطبيق</button>
-        </div>
-    </div>
-    <div id="code-page" class="screen">
-        <div class="card">
-            <h2>تفعيل الكود</h2>
-            <input type="text" id="vipCode" placeholder="اكتب كود الاشتراك هنا">
-            <button id="activateCodeBtn" class="code">تفعيل</button>
-            <button id="backLogin" class="secondary">رجوع</button>
-        </div>
-    </div>
-    <div id="home-page" class="screen">
-        <div class="topbar">
-            <h2>🎭 JOKER HD</h2>
-            <button id="logoutBtn" style="width: auto; padding: 5px 15px; background: #2f3640; font-size: 0.8rem; margin: 0;">خروج</button></div>
-        <div id="homeContent" style="width: 100%; height: calc(100vh - 60px); padding: 20px; overflow-y: auto; margin-top: 60px;">
-            <h3 style="color: #fbc531; margin-bottom: 15px;">مرحباً بك في لوحة تحكم JOKER HD</h3>
-            <p>تم تشغيل التطبيق بنجاح وتفعيل الأقسام بكامل الميزات!</p>
+            <button id="visitorEnter">دخول إلى الأقسام</button>
         </div>
     </div>
 
-    <script>
-        // كود التشغيل المدمج لضمان الانتقال الفوري بدون أخطاء ملفات خارجية
+    <div id="code-page" class="screen">
+        <div class="card">
+            <h2>تفعيل الكود</h2>
+            <div id="codeError" class="error-msg"></div>
+            <input type="text" id="vipCode" placeholder="اكتب كود الاشتراك هنا">
+            <button id="activateCodeBtn" class="code">تفعيل الاشتراك</button>
+            <button id="backLogin" class="secondary">رجوع</button>
+        </div>
+    </div>
+
+    <div id="support-page" class="screen">
+        <div class="card">
+            <h2>مركز الدعم الفني</h2>
+            <p class="subtitle">تواصل معنا عبر القنوات التالية لأي استفسار أو مشكلة:</p>
+            <button class="support" style="background: #25d366;" onclick="window.open('https://wa.me/', '_blank')">تواصل عبر واتساب</button>
+            <button class="support" style="background: #0088cc;" onclick="window.open('https://telegram.org/', '_blank')">قناة التليجرام</button>
+            <button id="backFromSupport" class="secondary">رجوع</button>
+        </div>
+    </div>
+
+    <div id="home-page" class="screen" style="justify-content: flex-start; padding-top: 80px;">
+        <div class="topbar">
+            <h2>🎭 JOKER HD</h2>
+            <button id="logoutBtn" style="width: auto; padding: 6px 15px; background: #2f3640; font-size: 0.8rem; margin: 0;">خروج</button>
+        </div>
+        <h3 style="color: #fbc531; margin-bottom: 5px; text-align: center;">أقسام التطبيق الرئيسية</h3>
+        <p style="color: #718093; font-size: 0.9rem; margin-bottom: 15px; text-align: center;">اختر القسم المطلوب للمتابعة</p>
+        
+        <div class="grid-sections">
+            <div class="section-box" onclick="alert('جاري فتح قسم البث المباشر...')">
+                <span>📡</span>
+                <h4>البث المباشر</h4>
+            </div>
+            <div class="section-box" onclick="alert('جاري فتح قسم الأفلام والمسلسلات...')">
+                <span>🎬</span>
+                <h4>الأفلام والمسلسلات</h4>
+            </div>
+            <div class="section-box" onclick="alert('جاري فتح قنوات الرياضة...')">
+                <span>⚽️</span>
+                <h4>القنوات الرياضية</h4>
+            </div>
+            <div class="section-box" onclick="alert('جاري فتح قسم الباقات المتميزة...')">
+                <span>⭐️</span>
+                <h4>باقات VIP</h4>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAdAQ49EIcldf...",
+            authDomain: "jokeerhd-64542.firebaseapp.com",
+            databaseURL: "https://jokeerhd-64542-default-rtdb.firebaseio.com",
+            projectId: "jokeerhd-64542",
+            storageBucket: "jokeerhd-64542.appspot.com",
+            messagingSenderId: "950615684006",
+            appId: "1:950615684006:web:0..."
+        };const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+
         document.addEventListener("DOMContentLoaded", () => {
             const loader = document.getElementById("loader");
             const loginPage = document.getElementById("login-page");
+            const registerPage = document.getElementById("register-page");
             const visitorPage = document.getElementById("visitor-page");
             const codePage = document.getElementById("code-page");
+            const supportPage = document.getElementById("support-page");
             const homePage = document.getElementById("home-page");
 
             setTimeout(() => {
                 loader.classList.remove("active");
                 loginPage.classList.add("active");
-            }, 1500);
+            }, 1200);
+
+            document.getElementById("goToRegister").addEventListener("click", () => {
+                loginPage.classList.remove("active");
+                registerPage.classList.add("active");
+            });
+
+            document.getElementById("backToLogin").addEventListener("click", () => {
+                registerPage.classList.remove("active");
+                loginPage.classList.add("active");
+            });
 
             document.getElementById("visitorBtn").addEventListener("click", () => {
                 loginPage.classList.remove("active");
@@ -91,6 +170,16 @@
             document.getElementById("openCodeBtn").addEventListener("click", () => {
                 loginPage.classList.remove("active");
                 codePage.classList.add("active");
+            });
+
+            document.getElementById("supportBtnLogin").addEventListener("click", () => {
+                loginPage.classList.remove("active");
+                supportPage.classList.add("active");
+            });
+
+            document.getElementById("backFromSupport").addEventListener("click", () => {
+                supportPage.classList.remove("active");
+                loginPage.classList.add("active");
             });
 
             document.getElementById("backLogin").addEventListener("click", () => {
@@ -103,12 +192,65 @@
                 homePage.classList.add("active");
             });
 
-            document.getElementById("loginBtn").addEventListener("click", () => {
-                loginPage.classList.remove("active");
-                homePage.classList.add("active");
+            document.getElementById("loginBtn").addEventListener("click", async () => {
+                const email = document.getElementById("loginEmail").value;
+                const password = document.getElementById("loginPassword").value;
+                const errBox = document.getElementById("loginError");
+
+                try {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    loginPage.classList.remove("active");
+                    homePage.classList.add("active");
+                } catch (error) {
+                    errBox.style.display = "block";
+                    errBox.innerText = "خطأ في البريد أو كلمة المرور!";
+                }
             });
 
-            document.getElementById("logoutBtn").addEventListener("click", () => {
+            document.getElementById("submitRegister").addEventListener("click", async () => {
+                const email = document.getElementById("regEmail").value;
+                const password = document.getElementById("regPassword").value;
+                const errBox = document.getElementById("regError");
+
+                try {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                    alert("تم إنشاء الحساب بنجاح! يمكنك تسجيل الدخول الآن.");
+                    registerPage.classList.remove("active");
+                    loginPage.classList.add("active");
+                } catch (error) {
+                    errBox.style.display = "block";
+                    errBox.innerText = "فشل التسجيل، تأكد من صحة البريد وكلمة المرور.";
+                }
+            });document.getElementById("activateCodeBtn").addEventListener("click", async () => {
+                const code = document.getElementById("vipCode").value.trim();
+                const errBox = document.getElementById("codeError");
+
+                if (!code) {
+                    errBox.style.display = "block";
+                    errBox.innerText = "الرجاء إدخال الكود";
+                    return;
+                }
+
+                try {
+                    const dbRef = ref(db);
+                    const snapshot = await get(child(dbRef, codes/${code}));
+                    
+                    if (snapshot.exists() && snapshot.val() === true) {
+                        alert("تم تفعيل الكود بنجاح!");
+                        codePage.classList.remove("active");
+                        homePage.classList.add("active");
+                    } else {
+                        errBox.style.display = "block";
+                        errBox.innerText = "الكود غير صحيح أو منتهي الصلاحية!";
+                    }
+                } catch (error) {
+                    errBox.style.display = "block";
+                    errBox.innerText = "حدث خطأ في الاتصال بقاعدة البيانات.";
+                }
+            });
+
+            document.getElementById("logoutBtn").addEventListener("click", async () => {
+                await signOut(auth);
                 homePage.classList.remove("active");
                 loginPage.classList.add("active");
             });

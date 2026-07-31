@@ -1,4 +1,4 @@
-[17/02/48 08:58 ص] M ~: <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -53,13 +53,12 @@
             <button id="openCodeBtn" class="code">لديك كود VIP؟ تفعيل الاشتراك</button>
             <button id="supportBtnLogin" class="support">مركز الدعم والمساعدة</button>
         </div>
-    </div>
-[17/02/48 08:58 ص] M ~: <div id="register-page" class="screen">
+    </div><div id="register-page" class="screen">
         <div class="card">
             <h2>إنشاء حساب جديد</h2>
             <div id="regError" class="error-msg"></div>
             <input type="email" id="regEmail" placeholder="البريد الإلكتروني">
-            <input type="password" id="regPassword" placeholder="كلمة المرور الجديدة">
+            <input type="password" id="regPassword" placeholder="كلمة المرور الجديدة (6 أحرف على الأقل)">
             <button id="submitRegister" class="code">تسجيل الحساب</button>
             <button id="backToLogin" class="secondary">رجوع</button>
         </div>
@@ -112,17 +111,45 @@
                 <h4>الأفلام والمسلسلات</h4>
             </div>
             <div class="section-box" onclick="alert('جاري فتح قنوات الرياضة...')">
-                <span>⚽</span>
+                <span>⚽️</span>
                 <h4>القنوات الرياضية</h4>
             </div>
             <div class="section-box" onclick="alert('جاري فتح قسم الباقات المتميزة...')">
-                <span>⭐</span>
+                <span>⭐️</span>
                 <h4>باقات VIP</h4>
             </div>
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { 
+          getAuth,
+          createUserWithEmailAndPassword,
+          signInWithEmailAndPassword,
+          signOut
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { 
+          getFirestore,
+          collection,
+          getDocs,
+          query,
+          where,
+          updateDoc,
+          doc
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyAdAQ49EIcldflX-Am5tk0NHJUur0ewXVE",
+          authDomain: "jokeerhd-64542.firebaseapp.com",
+          projectId: "jokeerhd-64542",
+          storageBucket: "jokeerhd-64542.firebasestorage.app",
+          messagingSenderId: "950615684006",
+          appId: "1:950615684006:web:0bf6a3c2044da1c4f61567"
+        };const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
         document.addEventListener("DOMContentLoaded", () => {
             const loader = document.getElementById("loader");
             const loginPage = document.getElementById("login-page");
@@ -132,12 +159,12 @@
             const supportPage = document.getElementById("support-page");
             const homePage = document.getElementById("home-page");
 
-            // الانتقال الفوري لشاشة تسجيل الدخول خلال ثانية واحدة تماماً
             setTimeout(() => {
                 loader.classList.remove("active");
                 loginPage.classList.add("active");
             }, 1000);
-[17/02/48 08:58 ص] M ~: document.getElementById("goToRegister").addEventListener("click", () => {
+
+            document.getElementById("goToRegister").addEventListener("click", () => {
                 loginPage.classList.remove("active");
                 registerPage.classList.add("active");
             });
@@ -177,8 +204,8 @@
                 homePage.classList.add("active");
             });
 
-            // التحقق من تسجيل الدخول
-            document.getElementById("loginBtn").addEventListener("click", () => {
+            // تسجيل الدخول عبر Firebase Auth
+            document.getElementById("loginBtn").addEventListener("click", async () => {
                 const email = document.getElementById("loginEmail").value.trim();
                 const password = document.getElementById("loginPassword").value;
                 const errBox = document.getElementById("loginError");
@@ -189,13 +216,18 @@
                     return;
                 }
 
-                // التحقق التجريبي (يمكنك تعديل البريد وكلمة المرور حسب رغبتك)
-                loginPage.classList.remove("active");
-                homePage.classList.add("active");
+                try {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    loginPage.classList.remove("active");
+                    homePage.classList.add("active");
+                } catch (error) {
+                    errBox.style.display = "block";
+                    errBox.innerText = "خطأ: البريد أو كلمة المرور غير صحيحة";
+                }
             });
 
-            // إنشاء حساب جديد
-            document.getElementById("submitRegister").addEventListener("click", () => {
+            // إنشاء حساب جديد عبر Firebase Auth
+            document.getElementById("submitRegister").addEventListener("click", async () => {
                 const email = document.getElementById("regEmail").value.trim();
                 const password = document.getElementById("regPassword").value;
                 const errBox = document.getElementById("regError");
@@ -204,40 +236,68 @@
                     errBox.style.display = "block";
                     errBox.innerText = "الرجاء تعبئة جميع الحقول";
                     return;
+                }try {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                    alert("تم إنشاء الحساب بنجاح!");
+                    registerPage.classList.remove("active");
+                    loginPage.classList.add("active");
+                } catch (error) {
+                    errBox.style.display = "block";
+                    errBox.innerText = "فشل التسجيل، تأكد من صحة البريد أو قوة كلمة المرور";
                 }
-
-                alert("تم إنشاء الحساب بنجاح!");
-                registerPage.classList.remove("active");
-                loginPage.classList.add("active");
             });
 
-            // التحقق من كود الـ VIP
-            document.getElementById("activateCodeBtn").addEventListener("click", () => {
-                const code = document.getElementById("vipCode").value.trim();
+            // التحقق من كود الـ VIP عبر Firebase Firestore
+            document.getElementById("activateCodeBtn").addEventListener("click", async () => {
+                const codeText = document.getElementById("vipCode").value.trim();
                 const errBox = document.getElementById("codeError");
 
-                if (!code) {
+                if (!codeText) {
                     errBox.style.display = "block";
                     errBox.innerText = "الرجاء إدخال كود الاشتراك";
                     return;
                 }
 
-                // الكود الصحيح الافتراضي للتفعيل هو VIP2026
-                if (code === "VIP2026" || code === "12345") {
-                    alert("تم تفعيل الكود بنجاح!");
-[17/02/48 08:58 ص] M ~: codePage.classList.remove("active");
-                    homePage.classList.add("active");
-                } else {
+                try {
+                    errBox.style.display = "none";
+                    // افتراض أن اسم الـ Collection في قاعدة البيانات هو 'codes'
+                    // والحقل الذي يخزن قيمة الكود هو 'code'
+                    const q = query(collection(db, "codes"), where("code", "==", codeText));
+                    const querySnapshot = await getDocs(q);
+
+                    if (!querySnapshot.empty) {
+                        let codeDoc = querySnapshot.docs[0];
+                        let codeData = codeDoc.data();
+
+                        // تحقق اختياري إن كان الكود مستخدماً مسبقاً (إذا كان لديك حقل used)
+                        if (codeData.used === true) {
+                            errBox.style.display = "block";
+                            errBox.innerText = "هذا الكود مستخدم مسبقاً!";
+                            return;
+                        }
+
+                        // (اختياري) تحديث الكود ليصبح مستخدماً لئلا يتم تكراره
+                        await updateDoc(doc(db, "codes", codeDoc.id), { used: true });
+
+                        alert("تم تفعيل الكود بنجاح!");
+                        codePage.classList.remove("active");
+                        homePage.classList.add("active");
+                    } else {
+                        errBox.style.display = "block";
+                        errBox.innerText = "الكود غير صحيح أو منتهي الصلاحية";
+                    }
+                } catch (error) {
                     errBox.style.display = "block";
-                    errBox.innerText = "الكود غير صحيح أو منتهي الصلاحية";
+                    errBox.innerText = "حدث خطأ أثناء الاتصال بقاعدة البيانات";
                 }
             });
 
-            document.getElementById("logoutBtn").addEventListener("click", () => {
+            document.getElementById("logoutBtn").addEventListener("click", async () => {
+                await signOut(auth);
                 homePage.classList.remove("active");
                 loginPage.classList.add("active");
             });
         });
-    <script type="module">
+    </script>
 </body>
 </html>

@@ -36,7 +36,7 @@
 <body>
     <div id="loader" class="screen active">
         <div class="logo">🎭 JOKER HD</div>
-        <div class="loading">جاري الاتصال بقاعدة البيانات...</div>
+        <div class="loading">جاري تشغيل التطبيق...</div>
     </div>
 
     <div id="login-page" class="screen">
@@ -58,9 +58,9 @@
             <h2>إنشاء حساب جديد</h2>
             <div id="regError" class="error-msg"></div>
             <input type="email" id="regEmail" placeholder="البريد الإلكتروني">
-            <input type="password" id="regPassword" placeholder="كلمة المرور الجديدة (6 أحرف على الأقل)">
+            <input type="password" id="regPassword" placeholder="كلمة المرور (6 أحرف على الأقل)">
             <button id="submitRegister" class="code">تسجيل الحساب</button>
-            <button id="backToLogin" class="secondary">رجوع لتسجيل الدخول</button>
+            <button id="backToLogin" class="secondary">رجوع</button>
         </div>
     </div>
 
@@ -86,7 +86,7 @@
     <div id="support-page" class="screen">
         <div class="card">
             <h2>مركز الدعم الفني</h2>
-            <p class="subtitle">تواصل معنا عبر القنوات التالية لأي استفسار أو مشكلة:</p>
+            <p class="subtitle">تواصل معنا عبر القنوات التالية:</p>
             <button class="support" style="background: #25d366;" onclick="window.open('https://wa.me/', '_blank')">تواصل عبر واتساب</button>
             <button class="support" style="background: #0088cc;" onclick="window.open('https://telegram.org/', '_blank')">قناة التليجرام</button>
             <button id="backFromSupport" class="secondary">رجوع</button>
@@ -134,11 +134,11 @@
             storageBucket: "jokeerhd-64542.appspot.com",
             messagingSenderId: "950615684006",
             appId: "1:950615684006:web:0..."
-        };const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getDatabase(app);
+        };
 
-        document.addEventListener("DOMContentLoaded", () => {
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);document.addEventListener("DOMContentLoaded", () => {
             const loader = document.getElementById("loader");
             const loginPage = document.getElementById("login-page");
             const registerPage = document.getElementById("register-page");
@@ -147,10 +147,11 @@
             const supportPage = document.getElementById("support-page");
             const homePage = document.getElementById("home-page");
 
+            // الانتقال الفوري لشاشة تسجيل الدخول بضمان عدم التعليق
             setTimeout(() => {
                 loader.classList.remove("active");
                 loginPage.classList.add("active");
-            }, 1200);
+            }, 1000);
 
             document.getElementById("goToRegister").addEventListener("click", () => {
                 loginPage.classList.remove("active");
@@ -192,10 +193,17 @@
                 homePage.classList.add("active");
             });
 
+            // التحقق الفعلي لتسجيل الدخول عبر Firebase
             document.getElementById("loginBtn").addEventListener("click", async () => {
-                const email = document.getElementById("loginEmail").value;
+                const email = document.getElementById("loginEmail").value.trim();
                 const password = document.getElementById("loginPassword").value;
                 const errBox = document.getElementById("loginError");
+
+                if(!email || !password) {
+                    errBox.style.display = "block";
+                    errBox.innerText = "الرجاء إدخال البريد وكلمة المرور";
+                    return;
+                }
 
                 try {
                     await signInWithEmailAndPassword(auth, email, password);
@@ -203,31 +211,39 @@
                     homePage.classList.add("active");
                 } catch (error) {
                     errBox.style.display = "block";
-                    errBox.innerText = "خطأ في البريد أو كلمة المرور!";
+                    errBox.innerText = "خطأ: البريد أو كلمة المرور غير صحيحة";
                 }
             });
 
+            // التحقق الفعلي لإنشاء الحساب عبر Firebase
             document.getElementById("submitRegister").addEventListener("click", async () => {
-                const email = document.getElementById("regEmail").value;
+                const email = document.getElementById("regEmail").value.trim();
                 const password = document.getElementById("regPassword").value;
                 const errBox = document.getElementById("regError");
 
-                try {
+                if(!email || !password) {
+                    errBox.style.display = "block";
+                    errBox.innerText = "الرجاء تعبئة جميع الحقول";
+                    return;
+                }try {
                     await createUserWithEmailAndPassword(auth, email, password);
-                    alert("تم إنشاء الحساب بنجاح! يمكنك تسجيل الدخول الآن.");
+                    alert("تم إنشاء الحساب بنجاح!");
                     registerPage.classList.remove("active");
                     loginPage.classList.add("active");
                 } catch (error) {
                     errBox.style.display = "block";
-                    errBox.innerText = "فشل التسجيل، تأكد من صحة البريد وكلمة المرور.";
+                    errBox.innerText = "فشل التسجيل، تأكد من صحة البريد أو قوة كلمة المرور";
                 }
-            });document.getElementById("activateCodeBtn").addEventListener("click", async () => {
+            });
+
+            // التحقق من كود الـ VIP عبر قاعدة البيانات
+            document.getElementById("activateCodeBtn").addEventListener("click", async () => {
                 const code = document.getElementById("vipCode").value.trim();
                 const errBox = document.getElementById("codeError");
 
                 if (!code) {
                     errBox.style.display = "block";
-                    errBox.innerText = "الرجاء إدخال الكود";
+                    errBox.innerText = "الرجاء إدخال كود الاشتراك";
                     return;
                 }
 
@@ -241,11 +257,11 @@
                         homePage.classList.add("active");
                     } else {
                         errBox.style.display = "block";
-                        errBox.innerText = "الكود غير صحيح أو منتهي الصلاحية!";
+                        errBox.innerText = "الكود غير صحيح أو منتهي الصلاحية";
                     }
                 } catch (error) {
                     errBox.style.display = "block";
-                    errBox.innerText = "حدث خطأ في الاتصال بقاعدة البيانات.";
+                    errBox.innerText = "خطأ في الاتصال بقاعدة البيانات";
                 }
             });
 

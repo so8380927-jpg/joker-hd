@@ -1,0 +1,58 @@
+const result = await getDocs(q);
+
+                    if (!result.empty) {
+                        const codeDoc = result.docs[0];
+                        const codeData = codeDoc.data();
+
+                        // التحقق هل تم استهلاك الكود مسبقاً لمنع التكرار
+                        if (codeData.used === true) {
+                            errBox.style.display = "block";
+                            errBox.innerText = "عذراً، هذا الكود مستخدم مسبقاً!";
+                            return;
+                        }
+
+                        // تحديث الكود في القاعدة ليصبح مستخدماً
+                        await updateDoc(doc(db, "vip_codes", codeDoc.id), {
+                            used: true
+                        });
+
+                        alert("تم تفعيل الكود بنجاح! نوع الباقة: " + codeData.package);
+                        codePage.classList.remove("active");
+                        homePage.classList.add("active");
+                    } else {
+                        errBox.style.display = "block";
+                        errBox.innerText = "الكود غير صحيح أو منتهي الصلاحية";
+                    }
+                } catch (error) {
+                    errBox.style.display = "block";
+                    errBox.innerText = "حدث خطأ في الاتصال بقاعدة البيانات";
+                }
+            });
+
+            document.getElementById("logoutBtn").addEventListener("click", async () => {
+                await signOut(auth);
+                homePage.classList.remove("active");
+                loginPage.classList.add("active");
+            });
+        });
+    </script>// Firebase يسمح بـ 500 عملية فقط في الدفعة الواحدة (Batch)
+                    if (countInBatch === 450) {
+                        await batch.commit();
+                        log(تم رفع دفعة من ${pkg.label} (${totalAdded} / 6000));
+                        batch = writeBatch(db);
+                        countInBatch = 0;
+                    }
+                }
+
+                if (countInBatch > 0) {
+                    await batch.commit();
+                    log(اكتملت فئة: ${pkg.label});
+                }
+            }
+
+            log("🎉 تم رفع 6000 كود بنجاح إلى قاعدة البيانات!");
+            alert("تم رفع جميع الأكواد بنجاح!");
+        });
+    </script>
+</body>
+</html>

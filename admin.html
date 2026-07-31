@@ -1,57 +1,92 @@
-const result = await getDocs(q);
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم الأكواد - JOKER HD</title>
+    <style>
+        body { background: #0f1016; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .card { background: #1e1e24; padding: 40px; border-radius: 15px; text-align: center; border: 1px solid #fbc531; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+        h2 { color: #fbc531; margin-bottom: 10px; }
+        p { color: #dcdde1; margin-bottom: 25px; }
+        button { background: #e84118; color: #fff; padding: 15px 30px; border: none; border-radius: 8px; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { opacity: 0.9; }
+        button:disabled { background: #718093; cursor: not-allowed; }
+        #status { margin-top: 25px; font-size: 1.1rem; font-weight: bold; }
+        .success { color: #4cd137; }
+        .error { color: #e84118; }
+        .loading { color: #fbc531; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>🚀 لوحة تحكم JOKER HD</h2>
+        <p>توليد ورفع 6000 كود VIP إلى قاعدة البيانات</p>
+        <button id="uploadBtn">بدء التوليد والرفع الآن 🚀</button>
+        <div id="status"></div>
+    </div>
 
-                    if (!result.empty) {
-                        const codeDoc = result.docs[0];
-                        const codeData = codeDoc.data();
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, writeBatch, doc, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-                        // التحقق هل تم استهلاك الكود مسبقاً لمنع التكرار
-                        if (codeData.used === true) {
-                            errBox.style.display = "block";
-                            errBox.innerText = "عذراً، هذا الكود مستخدم مسبقاً!";
-                            return;
-                        }
+        // إعدادات الاتصال بقاعدة بياناتك
+        const firebaseConfig = {
+            apiKey: "AIzaSyAdAQ49EIcldflX-Am5tk0NHJUur0ewXVE",
+            authDomain: "jokeerhd-64542.firebaseapp.com",
+            projectId: "jokeerhd-64542",
+            storageBucket: "jokeerhd-64542.firebasestorage.app",
+            messagingSenderId: "950615684006",
+            appId: "1:950615684006:web:0bf6a3c2044da1c4f61567"
+        };
 
-                        // تحديث الكود في القاعدة ليصبح مستخدماً
-                        await updateDoc(doc(db, "vip_codes", codeDoc.id), {
-                            used: true
-                        });
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-                        alert("تم تفعيل الكود بنجاح! نوع الباقة: " + codeData.package);
-                        codePage.classList.remove("active");
-                        homePage.classList.add("active");
-                    } else {
-                        errBox.style.display = "block";
-                        errBox.innerText = "الكود غير صحيح أو منتهي الصلاحية";
-                    }
-                } catch (error) {
-                    errBox.style.display = "block";
-                    errBox.innerText = "حدث خطأ في الاتصال بقاعدة البيانات";
-                }
-            });
+        document.getElementById("uploadBtn").addEventListener("click", async () => {
+            const status = document.getElementById("status");
+            const btn = document.getElementById("uploadBtn");
+            
+            btn.disabled = true;
+            status.className = "loading";
+            status.innerText = "⏳ جاري التوليد والرفع... يرجى عدم إغلاق الصفحة.";
 
-            document.getElementById("logoutBtn").addEventListener("click", async () => {
-                await signOut(auth);
-                homePage.classList.remove("active");
-                loginPage.classList.add("active");
-            });
-        });
-    </script>// Firebase يسمح بـ 500 عملية فقط في الدفعة الواحدة (Batch)
-                    if (countInBatch === 450) {
+            try {
+                let batch = writeBatch(db);
+                let count = 0;
+                const totalCodes = 6000;
+                
+                for (let i = 1; i <= totalCodes; i++) {
+                    // توليد كود عشوائي (مثال: K9X2M4PQ)
+                    const code = Math.random().toString(36).substring(2, 10).toUpperCase();
+                    const codeRef = doc(collection(db, "vip_codes"));
+                    
+                    batch.set(codeRef, {
+                        code: code,
+                        active: true, // الكود فعال
+                        used: false,  // لم يتم استخدامه بعد
+                    });
+                    
+                    count++;
+                    
+                    // Firebase يسمح برفع 500 كود كحد أقصى في الدفعة الواحدة، نرفعهم كل 450
+                    if (count === 450) {
                         await batch.commit();
-                        log(تم رفع دفعة من ${pkg.label} (${totalAdded} / 6000));
-                        batch = writeBatch(db);
-                        countInBatch = 0;
+                        batch = writeBatch(db); // بدء دفعة جديدة
+                        count = 0;
                     }
                 }
-
-                if (countInBatch > 0) {
+                
+                // رفع أي أكواد متبقية في الدفعة الأخيرة
+                if (count > 0) {
                     await batch.commit();
-                    log(اكتملت فئة: ${pkg.label});
-                }
+                }status.className = "success";
+                status.innerText = "🎉 تمت العملية! تم رفع 6000 كود VIP بنجاح.";
+            } catch (error) {
+                status.className = "error";
+                status.innerText = "❌ حدث خطأ أثناء الرفع: " + error.message;
+                btn.disabled = false;
             }
-
-            log("🎉 تم رفع 6000 كود بنجاح إلى قاعدة البيانات!");
-            alert("تم رفع جميع الأكواد بنجاح!");
         });
     </script>
 </body>

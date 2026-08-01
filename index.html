@@ -3,162 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JOKER HD</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #0f1016; color: #ffffff; direction: rtl; overflow: hidden; }
-        .screen { display: none; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; background-color: #0f1016; justify-content: center; align-items: center; flex-direction: column; }
-        .screen.active { display: flex; }
-        .card { background: #1e1e24; padding: 25px; border-radius: 15px; width: 90%; max-width: 400px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); text-align: center; }
-        .logo { font-size: 2.5rem; font-weight: bold; color: #fbc531; margin-bottom: 10px; }
-        .subtitle { font-size: 0.9rem; color: #718093; margin-bottom: 15px; }
-        input { width: 100%; padding: 12px; margin-bottom: 12px; background: #2f3640; border: 1px solid #485460; border-radius: 8px; color: #fff; font-size: 1rem; text-align: center; }
-        input:focus { border-color: #fbc531; outline: none; }
-        button { width: 100%; padding: 12px; background: #009432; border: none; border-radius: 8px; color: white; font-size: 1rem; font-weight: bold; cursor: pointer; margin-bottom: 10px; transition: 0.3s; }
-        button:hover { opacity: 0.9; }
-        button.secondary { background: transparent; border: 1px solid #485460; color: #dcdde1; }
-        .error-box { color: #e84118; font-size: 0.9rem; margin-bottom: 10px; display: none; }
-    </style>
+    <title>تطبيق البث الذكي 📺</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- شاشة البداية -->
-    <div id="loginPage" class="screen active">
-        <div class="card">
-            <div class="logo">JOKER HD</div>
-            <div class="subtitle">أهلاً بك في التطبيق</div>
-            <button id="goToCodeBtn">لديك كود VIP؟ تفعيل الاشتراك</button>
-            <button id="visitorBtn" class="secondary">الدخول كزائر</button>
+    <!-- شاشة التحميل -->
+    <div id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- زر التحديث / الإشعارات العلوي -->
+    <header style="display: flex; justify-content: space-between; padding: 15px;">
+        <button id="profileBtn" class="secondary">👤 حسابي</button>
+        <div style="display: flex; gap: 10px;">
+            <button id="notificationBtn" style="background:#7b2cbf; border-radius:50%; width:45px; height:45px; border:none; cursor:pointer; color:white; position:relative;">
+                🔔 <span id="notificationCount" style="position:absolute; top:5px; right:5px; background:red; border-radius:50%; padding:2px 6px; font-size:10px;">0</span>
+            </button>
+            <button id="settingsBtn" class="secondary">⚙️ الإعدادات</button>
+        </div>
+    </header>
+
+    <!-- الصفحة الرئيسية -->
+    <div id="homePage" class="screen active" style="padding: 20px;">
+        <!-- شريط البحث المتقدم -->
+        <div class="advanced-search" style="margin-bottom: 20px; display:flex; gap:10px; flex-wrap:wrap;">
+            <input id="advancedSearch" placeholder="🔍 ابحث عن قناة، فيلم..." style="flex:1; padding:10px; border-radius:10px; border:1px solid #7b2cbf; background:#120022; color:white;">
+            <select id="categoryFilter" style="padding:10px; border-radius:10px; background:#120022; color:white; border:1px solid #7b2cbf;">
+                <option value="all">كل الأقسام</option>
+                <option value="live">بث مباشر</option>
+                <option value="sports">رياضة</option>
+                <option value="movies">أفلام</option>
+                <option value="kids">أطفال</option>
+            </select>
+            <select id="vipFilter" style="padding:10px; border-radius:10px; background:#120022; color:white; border:1px solid #7b2cbf;">
+                <option value="all">الكل</option>
+                <option value="vip">VIP ⭐️</option>
+                <option value="free">مجاني</option>
+            </select>
+        </div>
+
+        <div id="searchResults" class="content-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap:15px; margin-bottom:20px;"></div>
+
+        <h2 class="section-title">الأقسام</h2>
+        <div id="categoriesGrid" class="content-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap:15px; margin-bottom:20px;"></div>
+
+        <!-- مشغل التلفزيون المتقدم و EPG -->
+        <h2 class="section-title">البث الحي و EPG</h2>
+        <div class="tv-layout" style="display:flex; gap:15px; flex-wrap:wrap;">
+            <div class="player-area" style="flex:2; min-width:280px;">
+                <video id="tvPlayer" controls playsinline style="width:100%; border-radius:15px; background:black;"></video>
+                <div class="program-info" style="background:#240046; padding:12px; border-radius:12px; margin-top:10px; border:1px solid #7b2cbf;">
+                    <h3 id="currentProgram" style="color:#ffd54a; font-size:16px; margin-bottom:5px;">البرنامج الحالي</h3>
+                    <p id="nextProgram" style="color:#aaa; font-size:13px;">القادم</p>
+                </div>
+            </div>
+            <div id="channelList" class="channel-list" style="flex:1; min-width:200px; background:#240046; padding:10px; border-radius:15px; max-height:350px; overflow-y:auto; border:1px solid #7b2cbf;"></div>
         </div>
     </div>
 
-    <!-- شاشة إدخال الكود -->
-    <div id="codePage" class="screen">
-        <div class="card">
-            <div class="logo">تفعيل الكود</div>
-            <div class="subtitle" style="color: #fbc531;">الرجاء إدخال كود الاشتراك الخاص بك</div>
-            <div id="codeError" class="error-box"></div>
-            <input type="text" id="vipCode" placeholder="أدخل الكود هنا" style="text-transform: uppercase;">
-            <button id="activateCodeBtn">تفعيل الاشتراك</button>
-            <button id="backToLoginBtn" class="secondary">رجوع</button>
+    <!-- شاشة اختيار الملفات -->
+    <div id="profilesPage" class="screen" style="display:none; padding:20px; text-align:center;">
+        <div class="card" style="max-width:400px; margin:40px auto; background:#18002d; padding:25px; border-radius:20px; border:1px solid #7b2cbf;">
+            <h2>من يستخدم التطبيق؟</h2>
+            <div id="profilesGrid" class="content-grid" style="display:flex; justify-content:center; gap:15px; margin:20px 0; flex-wrap:wrap;"></div>
+            <button id="addProfileBtn" class="secondary" style="width:100%;">+ إضافة ملف</button>
         </div>
     </div>
 
-    <!-- الشاشة الرئيسية للتطبيق -->
-    <div id="homePage" class="screen">
-        <div class="card">
-            <div class="logo">JOKER HD</div>
-            <div class="subtitle" style="color: #4cd137;">تم تفعيل الحساب بنجاح! 🎉</div>
-            <p style="margin-bottom: 20px;">مرحباً بك في لوحة التحكم الرئيسية الخاصة بك.</p>
-            <button id="logoutBtn" class="secondary">تسجيل الخروج</button>
+    <!-- شاشة حماية PIN (الرقابة الأبوية) -->
+    <div id="pinPage" class="screen" style="display:none; padding:20px; text-align:center;">
+        <div class="card" style="max-width:350px; margin:50px auto; background:#18002d; padding:25px; border-radius:20px; border:1px solid #7b2cbf;">
+            <h2>أدخل الرقم السري للطفل 🔒</h2>
+            <input id="profilePin" type="password" placeholder="PIN" style="width:100%; padding:12px; margin:15px 0; border-radius:10px; border:1px solid #7b2cbf; background:#120022; color:white; text-align:center; font-size:18px;">
+            <button id="checkPinBtn" class="play-btn" style="width:100%; padding:10px; background:#7b2cbf; color:white; border:none; border-radius:10px; cursor:pointer;">دخول</button>
         </div>
     </div>
 
-    <script type="module">
-        // استيراد مكتبات فايربيس
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, query, where, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    <!-- شاشة الحساب الشخصي -->
+    <div id="profilePage" class="screen" style="display:none; padding:20px;">
+        <div class="card" style="max-width:400px; margin:20px auto; background:#18002d; padding:25px; border-radius:20px; border:1px solid #7b2cbf; text-align:center;">
+            <img id="profileImage" class="profile-img" alt="صورة المستخدم" style="width:110px; height:110px; border-radius:50%; object-fit:cover; border:3px solid #9d4edd; margin-bottom:15px;">
+            <h2 id="profileName" style="color:white; margin-bottom:5px;">المستخدم</h2>
+            <p id="profileEmail" style="color:#aaa; font-size:14px; margin-bottom:15px;">البريد الإلكتروني</p>
+            <div class="notice" style="background:#240046; padding:10px; border-radius:10px; margin-bottom:15px; border:1px solid #7b2cbf;">
+                حالة الاشتراك: <span id="vipStatus" style="color:#ffd54a; font-weight:bold;"></span>
+            </div>
+            <button id="backProfileBtn" class="secondary" style="width:100%; padding:10px; background:transparent; border:1px solid #7b2cbf; color:white; border-radius:10px; cursor:pointer;">رجوع</button>
+        </div>
+    </div>
 
-        // إعدادات قاعدة البيانات الخاصة بك
-        const firebaseConfig = {
-            apiKey: "AIzaSyAdAQ49EIcldflX-Am5tk0NHJUur0ewXVE",
-            authDomain: "jokeerhd-64542.firebaseapp.com",
-            projectId: "jokeerhd-64542",
-            storageBucket: "jokeerhd-64542.firebasestorage.app",
-            messagingSenderId: "950615684006",
-            appId: "1:950615684006:web:0bf6a3c2044da1c4f61567"
-        };
-
-        // تهيئة فايربيس
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);// تعريف الشاشات
-        const loginPage = document.getElementById("loginPage");
-        const codePage = document.getElementById("codePage");
-        const homePage = document.getElementById("homePage");
-
-        // التنقل بين الشاشات
-        document.getElementById("goToCodeBtn").addEventListener("click", () => {
-            loginPage.classList.remove("active");
-            codePage.classList.add("active");
-        });
-
-        document.getElementById("backToLoginBtn").addEventListener("click", () => {
-            codePage.classList.remove("active");
-            loginPage.classList.add("active");
-        });
-
-        document.getElementById("visitorBtn").addEventListener("click", () => {
-            loginPage.classList.remove("active");
-            homePage.classList.add("active");
-        });
-
-        document.getElementById("logoutBtn").addEventListener("click", () => {
-            homePage.classList.remove("active");
-            loginPage.classList.add("active");
-        });
-
-        // تفعيل كود الـ VIP والتحقق من قاعدة البيانات
-        document.getElementById("activateCodeBtn").addEventListener("click", async () => {
-            const codeInput = document.getElementById("vipCode");
-            const codeText = codeInput.value.trim().toUpperCase(); // يحول الحروف إلى كبيرة تلقائياً
-            const errBox = document.getElementById("codeError");
-            const btn = document.getElementById("activateCodeBtn");
-
-            if (!codeText) {
-                errBox.style.display = "block";
-                errBox.innerText = "الرجاء إدخال كود الاشتراك";
-                return;
-            }
-
-            btn.disabled = true;
-            btn.innerText = "جاري التحقق...";
-            errBox.style.display = "none";
-
-            try {
-                // البحث عن الكود في قاعدة البيانات
-                const q = query(
-                    collection(db, "vip_codes"),
-                    where("code", "==", codeText)
-                );
-
-                const result = await getDocs(q);
-
-                if (!result.empty) {
-                    const codeDoc = result.docs[0];
-                    const codeData = codeDoc.data();
-
-                    // التحقق مما إذا كان الكود غير فعال أو مستخدم
-                    if (codeData.active === false) {
-                        errBox.style.display = "block";
-                        errBox.innerText = "عذراً، هذا الكود غير فعال.";
-                    } else if (codeData.used === true) {
-                        errBox.style.display = "block";
-                        errBox.innerText = "عذراً، هذا الكود مستخدم مسبقاً!";
-                    } else {
-                        // الكود صالح! نقوم بتحديث حالته ليصبح مستخدماً
-                        await updateDoc(doc(db, "vip_codes", codeDoc.id), {
-                            used: true
-                        });
-
-                        alert("تم تفعيل الكود بنجاح! مرحباً بك في VIP");
-                        
-                        // إخفاء صفحة الكود وإظهار الصفحة الرئيسية
-                        codePage.classList.remove("active");
-                        homePage.classList.add("active");
-                    }
-                } else {
-                    errBox.style.display = "block";
-                    errBox.innerText = "الكود غير صحيح، تأكد من كتابته بشكل سليم.";
-                }
-            } catch (error) {
-                console.error("Firebase Error:", error);
-                errBox.style.display = "block";
-                errBox.innerText = "حدث خطأ أثناء الاتصال. يرجى المحاولة لاحقاً.";
-            } finally {
-                btn.disabled = false;
-                btn.innerText = "تفعيل الاشتراك";
-            }
-        });
-    </script>
-</body>
-</html>
+    <!-- شاشة الإعدادات -->
+    <div id="settingsPage" class="screen" style="display:none; padding:20px;">
+        <div class="card" style="max-width:400px; margin:20px auto; background:#18002d; padding:25px; border-radius:20px; border:1px solid #7b2cbf;">
+            <h2 style="color:white; margin-bottom:20px; text-align:center;">⚙️ إعدادات التطبيق</h2>
+            <label style="display:flex; justify-content:space-between; align-items:center; color:white; margin-bottom:15px;">
+                الإشعارات
+                <input type="checkbox" id="notificationsToggle" style="transform: scale(1.3);">
+            </label>
+            <label style="display:block; color:white; margin-bottom:15px;">
+                جودة البث
+                <select id="qualitySelect" style="width:100%; padding:10px; margin-top:5px; border-radius:10px; background:#120022; color:white; border:1px solid #7b2cbf;">
+                    <option value="auto">تلقائي</option>
+                    <option value="high">عالية</option>
+                    <option value="low">منخفضة</option>
+                </select>
+            </label>
+            <button id="saveSettingsBtn" class="play-btn" style="width:100%; padding:10px; background:#7b2cbf; color:white; border:none; border-radius:10px; cursor:pointer; margin-bottom:10px;">حفظ</button>
+            <button id="backSettingsBtn" class="secondary" style="width:100%; padding:10px; background:transparent; border:1px solid #7b2cbf; color:white; border-radius:10px; cursor:pointer;">رجوع</button>
+        </div>
+    </div>
+    

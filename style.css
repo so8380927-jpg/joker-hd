@@ -130,3 +130,6 @@ body {
     max-width: 350px;
     width: 90%;
 }
+#loader, .loader, div[id*="loader"], .preloader {
+    display: none !important;
+}

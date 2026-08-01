@@ -9,8 +9,9 @@ body {
     background-color: #10002b;
     color: white;
     min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto !important;
 }
-
 .screen {
     display: none;
 }

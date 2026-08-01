@@ -1,1 +1,131 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Tahoma, sans-serif;
+}
 
+body {
+    background-color: #10002b;
+    color: white;
+    min-height: 100vh;
+}
+
+.screen {
+    display: none;
+}
+
+.screen.active {
+    display: block;
+}
+
+.category-card {
+    background: linear-gradient(135deg, #240046, #5a189a);
+    height: 120px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 35px;
+    cursor: pointer;
+    transition: 0.35s;
+    border: 1px solid #9d4edd;
+}
+
+.category-card span {
+    font-size: 16px;
+    margin-top: 8px;
+    color: white;
+}
+
+.category-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 0 20px #9d4edd;
+}
+
+.channel-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    margin-bottom: 8px;
+    background: #5a189a;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.channel-item:hover {
+    background: #7b2cbf;
+}
+
+.channel-item img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-card {
+    background: linear-gradient(135deg, #240046, #7b2cbf);
+    border-radius: 20px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100px;
+    border: 1px solid #9d4edd;
+}
+
+.profile-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #9d4edd;
+}
+
+.profile-card img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+#loader {
+    position: fixed;
+    inset: 0;
+    background: #10002b;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.4s ease;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 6px solid #7b2cbf;
+    border-top-color: white;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.update-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #240046, #7b2cbf);
+    color: white;
+    padding: 25px;
+    border-radius: 20px;
+    z-index: 999;
+    text-align: center;
+    box-shadow: 0 0 30px #9d4edd;
+    max-width: 350px;
+    width: 90%;
+}

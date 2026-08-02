@@ -19,11 +19,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     // فحص التحديثات
     checkUpdate();
 
-    // التحميل المبدئي للأقسام والتلفزيون والملفات
-    loadCategories();
-    loadChannels();
-    loadProfiles();
-    loadNotifications();
+    // التحميل المبدئي محمي بـ try...catch لضمان عدم توقف التطبيق
+    try {
+        await loadCategories();
+        await loadChannels();
+        await loadProfiles();
+        await loadNotifications();
+    } catch (error) {
+        console.error("خطأ في تحميل البيانات:", error);
+    }
 
     // ربط التنقل بين الشاشات والأزرار
     const homePage = document.getElementById("homePage");
